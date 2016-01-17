@@ -49,6 +49,14 @@ module.exports = function(app, passport) {
     failureRedirect: '/'
   }));
 
+  app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+  app.get('/auth/google/callback', passport.authenticate('google', {
+    successRedirect: '/profile',
+    failureRedirect: '/'
+  }));
+};
+
   //route middleware to make sure user is logged in 
 
 function isLoggedIn(req, res, next){
