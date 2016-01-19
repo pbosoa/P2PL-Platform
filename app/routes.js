@@ -34,7 +34,6 @@ module.exports = function(app, passport) {
     res.redirect('/');
   });
 
-
   app.get('/auth/facebook', passport.authenticate('facebook', {scope: 'email'}));
 
   app.get('/auth/facebook/callback', passport.authenticate('facebook', {
@@ -42,7 +41,7 @@ module.exports = function(app, passport) {
     failureRedirect: '/'
   }));
 
-  app.get('/auth/twitter', passport.authenticate('twitter'));
+  app.get('/auth/twitter', passport.authenticate('twitter', {scope: 'email'}));
 
   app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     successRedirect: '/profile',
@@ -55,6 +54,14 @@ module.exports = function(app, passport) {
     successRedirect: '/profile',
     failureRedirect: '/'
   }));
+
+  app.get('/connect/facebook', passport.authorize('facebook', {scope: 'email'}));
+
+  app.get('/connect/facebook/callback', passport.authorize('facebook', {
+    successRedirect: '/profile',
+    failureRedirect: '/'
+  }));
+
 };
 
   //route middleware to make sure user is logged in 
