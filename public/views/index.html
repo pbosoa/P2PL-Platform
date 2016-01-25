@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <title> P2P Lending Platform </title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="views/main.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+    <script src="/factories/httpInterceptor.js"></script>
+    <script src="/directives/common.js"></script>
+<!--     // <script src="/controllers/profile.js"></script>
+    // <script src="/controllers/login.js"></script> -->
+<!--     // <script src="/modules/growl.js"></script> -->
+    <script src="/modules/core.js"></script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="header">
+          <div class="col-sm-1 col-sm-offset-7">
+            <button class="headerButton"> Profile </button>
+          </div>
+          <div class="col-sm-1">
+            <button class="headerButton"> Lenders </button>
+          </div>
+          <div class="col-sm-1">
+            <button class="headerButton"> Borrowers </button>
+          </div>
+          <div class="col-sm-2">
+            <button class="headerButton"> Log in / Sign up </button>
+          </div>
+    </div>
+
+    <div class="container" ng-view>
+    </div>
+  </body>
+</html>
