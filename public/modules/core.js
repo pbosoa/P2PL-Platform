@@ -1,4 +1,4 @@
-angular.module('app', ['ngRoute'])
+angular.module('app', ['ngRoute', 'geolocation','gMapService'])
   
   .config(['$routeProvider', '$locationProvider', function($routeProvider,$locationProvider){
     $routeProvider
@@ -23,6 +23,12 @@ angular.module('app', ['ngRoute'])
         templateUrl: '/views/signup.html',
         controller: 'SignupController',
         controllerAs: 'SignupController',
+        caseInsensitiveMatch: true
+      })
+      .when('/borrower', {
+        templateUrl: '/views/borrower.html',
+        controller: 'BorrowerController',
+        controllerAs: 'BorrowerController',
         caseInsensitiveMatch: true
       })
       .otherwise({
@@ -67,8 +73,37 @@ angular.module('app', ['ngRoute'])
       });
   }])
 
-  .controller('IndexController', function($scope){
+  .controller('IndexController', function($scope, geolocation, gMapService){
+    geolocation.getLocation().then(function(data){
+      coords = {lat:data.coords.latitude, long: data.coords.longitude};
+      var yourLong = parseFloat(coords.long).toFixed(3);
+      var yourLat = parseFloat(coords.lat).toFixed(3);
+      console.log(yourLong, yourLat);
+      gMapService.refresh(yourLat, yourLong);
+    });
+  })
 
+  .controller('BorrowerController', function($scope, $http){
+    $scope.newBorrower = function(){
+      var userData = {
+        name: $scope.name,
+        age: $scope.age,
+        location: [$scope.longitude, $scope.latitude],
+        creditScore: $scope.creditScore
+      };
+      $http.post('/borrowers', userData)
+        .success(function(data){
+          $scope.name = "";
+          $scope.age = "";
+          $scope.longitude = "";
+          $scope.latitude = "";
+          $scope.creditScore = "";
+          console.log('success');
+        })
+        .error(function(data){
+          console.log('Error: ' + data);
+        });
+    }
   })
 
   .directive('redir', ['$http', function($http){
