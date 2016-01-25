@@ -1,4 +1,5 @@
 var path = require('path');
+var Borrower = require('../app/models/borrower.js');
 
 module.exports = function(app, passport) {
   
@@ -78,9 +79,30 @@ module.exports = function(app, passport) {
     return res.json(req.user);
   });
 
+  app.get('/borrowers', function(req, res){
+    var query = Borrower.find({});
+    query.exec(function(err, borrowers){
+      if (err){
+        res.send(err);
+      }
+      res.json(borrowers);
+    });
+  });
+
+  app.post('/borrowers', isLoggedinAjax, function(req, res){
+    var newBorrower = new Borrower(req.body);
+    newBorrower.save(function(err){
+      if (err){
+        res.send(err);
+      }
+      res.json(req.body);
+    })
+  });
+
   app.get('*', function(req, res){
     res.sendFile(path.join(__dirname + './../public/views/index.html'));
   });
+
 
 };
 
