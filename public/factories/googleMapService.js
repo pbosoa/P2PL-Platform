@@ -15,28 +15,35 @@ angular.module('googleMapService', ['geolocation'])
     var selectedLong = -117.815;
 
     googleMapService.refresh = function(latitude, longitude){
-      // locations = [];
+      locations = [];
       // selectedLat = latitude;
       // selectedLong = longitude;
       initialize(latitude, longitude);
-      // $http.get('/users').success(function(response){
-      //   locations = convertToMapPoints(response);
-      //   initialize(latitude, longitude);
-      // }).error(function(){});
+      $http.get('/borrowers').success(function(response){
+        locations = convertToMapPoints(response);
+        initialize(latitude, longitude);
+      }).error(function(){});
     };
 
     var convertToMapPoints = function(response){
       var locations = [];
       for (var i = 0; i < response.length; i++){
         var user = response[i];
-        var contentString = '<p><b>Email</b>:' + user.email + '</p>';
+        var contentString = 
+        '<p><b>Name</b>: ' + user.name +
+        '<br><b>Age</b>: ' + user.age +
+        '<br><b>Credit Score</b>: ' + user.creditScore +
+        '</p>';
+
         locations.push({
           latlon: new google.maps.LatLng(user.location[1], user.location[0]),
           message: new google.maps.InfoWindow({
             content: contentString,
             maxWidth: 320
           }),
-          email: user.email
+          name: user.name,
+          age: user.age,
+          credit_score: user.creditScore
         });
       }
       return locations;
@@ -50,18 +57,20 @@ angular.module('googleMapService', ['geolocation'])
           center: myLatLng
         });
       }
-      // locations.forEach(function(n, i){
-      //   var marker = new google.maps.Marker({
-      //     position: n.latlon,
-      //     map: map,
-      //     title: 'Big Map',
-      //     icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-      //   });
-      //   google.maps.event.addListener(marker, 'click', function(e){
-      //     currentSelectedMarker = n;
-      //     n.message.open(map, marker);
-      //   });
-      // });
+
+      locations.forEach(function(n, i){
+        var marker = new google.maps.Marker({
+          position: n.latlon,
+          map: map,
+          title: 'Big Map',
+          icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        });
+        google.maps.event.addListener(marker, 'click', function(e){
+          currentSelectedMarker = n;
+          n.message.open(map, marker);
+        });
+      });
+
       var initialLocation = new google.maps.LatLng(latitude, longitude);
       var marker = new google.maps.Marker({
         position: initialLocation,
