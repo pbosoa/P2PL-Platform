@@ -16,8 +16,10 @@ require('./config/passport')(passport);
 
 // set-up for express application
 app.use(express.static(path.join(__dirname, 'views')));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 app.use(cookieParser('secretKey'));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 //required for passport
 app.use(session({secret: 'thesecret', resave: false, saveUninitialized: true}));
